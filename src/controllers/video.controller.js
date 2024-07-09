@@ -4,7 +4,10 @@ import { User } from "../models/user.model.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import {
+  deleteFromCloudinary,
+  uploadOnCloudinary,
+} from "../utils/cloudinary.js";
 
 const getAllVideos = asyncHandler(async (req, res) => {
   const { page = 1, limit = 10, query, sortBy, sortType, userId } = req.query;
@@ -46,10 +49,12 @@ const publishAVideo = asyncHandler(async (req, res) => {
   if (!videoFileLocalPath) throw new ApiError(400, "Video file required");
 
   const thumbnailLocalPath = req.files?.thumbnail[0].path;
-  if (!thumbnailLocalPath) throw new ApiError(400, "Thumbnail is required");
+  if (!thumbnailLocalPath)
+    throw new ApiError(400, "Error occured while uploading thumbnail");
 
   const videoFile = await uploadOnCloudinary(videoFileLocalPath);
-  if (!videoFile) throw new ApiError(400, "Video file required");
+  if (!videoFile)
+    throw new ApiError(400, "Error occured while uploading video file");
 
   const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
   if (!thumbnail) throw new ApiError(400, "Thumbnail is required");
@@ -57,6 +62,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   const video = await Video.create({
     videoFile: videoFile.url,
     thumbnail: thumbnail.url,
+    thumbnailPublicId: thumbnail.public_id,
     title,
     description,
     duration: videoFile.duration,
@@ -122,10 +128,12 @@ const updateVideo = asyncHandler(async (req, res) => {
   }
 
   if (thumbnailLocalPath) {
+    await deleteFromCloudinary(currentVideo.thumbnailPublicId);
     const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
     if (!thumbnail.url)
       throw new ApiError(400, "Error while uploading thumbnail");
     updateDoc.thumbnail = thumbnail.url;
+    updateDoc.thumbnailPublicId = thumbnail.public_id;
   }
 
   if (Object.keys(updateDoc).length > 0) {
