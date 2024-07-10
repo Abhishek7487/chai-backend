@@ -49,15 +49,15 @@ const publishAVideo = asyncHandler(async (req, res) => {
   if (!videoFileLocalPath) throw new ApiError(400, "Video file required");
 
   const thumbnailLocalPath = req.files?.thumbnail[0].path;
-  if (!thumbnailLocalPath)
-    throw new ApiError(400, "Error occured while uploading thumbnail");
+  if (!thumbnailLocalPath) throw new ApiError(400, "Thumbnail is required");
 
   const videoFile = await uploadOnCloudinary(videoFileLocalPath);
   if (!videoFile)
     throw new ApiError(400, "Error occured while uploading video file");
 
   const thumbnail = await uploadOnCloudinary(thumbnailLocalPath);
-  if (!thumbnail) throw new ApiError(400, "Thumbnail is required");
+  if (!thumbnail)
+    throw new ApiError(400, "Error occured while uploading thumbnail");
 
   const video = await Video.create({
     videoFile: videoFile.url,
