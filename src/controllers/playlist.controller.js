@@ -88,9 +88,13 @@ const addVideoToPlaylist = asyncHandler(async (req, res) => {
   if (isVideoInPlaylist)
     throw new ApiError(400, "Video is already in the playlist");
 
-  const updatedPlaylist = await Playlist.findByIdAndUpdate(playlistId, {
-    $push: { videos: currentVideo },
-  });
+  const updatedPlaylist = await Playlist.findByIdAndUpdate(
+    playlistId,
+    {
+      $push: { videos: currentVideo },
+    },
+    { new: true }
+  );
 
   return res
     .status(200)
@@ -115,9 +119,13 @@ const removeVideoFromPlaylist = asyncHandler(async (req, res) => {
   if (!isVideoInPlaylist)
     throw new ApiError(400, "Video not found in playlist");
 
-  const updatedPlaylist = await Playlist.findByIdAndUpdate(playlistId, {
-    $pull: { videos: currentVideo._id },
-  });
+  const updatedPlaylist = await Playlist.findByIdAndUpdate(
+    playlistId,
+    {
+      $pull: { videos: currentVideo._id },
+    },
+    { new: true }
+  );
 
   return res
     .status(200)

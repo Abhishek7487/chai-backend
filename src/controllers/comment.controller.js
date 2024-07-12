@@ -68,11 +68,15 @@ const updateComment = asyncHandler(async (req, res) => {
   if (!content)
     throw new ApiError(400, "Comment to be updated cannot be empty");
 
-  const updatedComment = await Comment.findByIdAndUpdate(commentId, {
-    $set: {
-      content,
+  const updatedComment = await Comment.findByIdAndUpdate(
+    commentId,
+    {
+      $set: {
+        content,
+      },
     },
-  });
+    { new: true }
+  );
 
   if (!updatedComment) throw new ApiError(400, "Failed to update the comment");
 
