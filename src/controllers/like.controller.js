@@ -12,6 +12,8 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
   if (!isValidObjectId(videoId))
     throw new ApiError(400, "Failed to like the video");
 
+  const currentVideo = await Video.findById(videoId);
+
   let newCollection;
 
   const isVideoLiked = (
@@ -39,7 +41,7 @@ const toggleVideoLike = asyncHandler(async (req, res) => {
     return res.status(200).json(new ApiResponse(200, {}, "Video unliked"));
   } else {
     newCollection = await Like.create({
-      video: videoId,
+      video: currentVideo,
       likedBy: req.user,
     });
 
