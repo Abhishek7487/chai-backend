@@ -22,6 +22,8 @@ This project is a backend implementation of a YouTube clone, developed as part o
 ### Prerequisites
 - Node.js
 - MongoDB
+- React (Vite)
+- Axios
 
 ### Installation
 1. Clone the repository:
