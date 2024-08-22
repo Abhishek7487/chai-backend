@@ -12,6 +12,7 @@ html {
   --color-primary: #0f0f0f;
   --color-secondary: #3f3f3f;
   --color-brand: #fe0001;
+  --color-blue: #3ea6ff;
 }
 
 body {
@@ -19,6 +20,8 @@ body {
   min-height: 100vh;
   line-height: 1.5;
   font-size: 1.6rem;
+  background-color: var(--color-primary);
+  color: #fff;
 }
 
 button {

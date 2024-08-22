@@ -3,10 +3,11 @@ import SearchBar from "./SearchBar";
 
 import { AiOutlineVideoCameraAdd } from "react-icons/ai";
 import { LuUserCircle2 } from "react-icons/lu";
+import { useNavigate } from "react-router-dom";
+import useAuth from "../hooks/useAuth";
 
 const StyledHeader = styled.header`
   grid-column: 1/-1;
-  border-bottom: 1px solid var(--color-secondary);
   padding: 0.6rem 2.4rem;
   display: flex;
   align-items: center;
@@ -21,10 +22,32 @@ const StyledHeader = styled.header`
     align-items: center;
     gap: 2.4rem;
     font-size: 2.4rem;
+
+    .singIn {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 0 5px var(--color-brand);
+      border-radius: 2rem;
+      padding: 0.6rem 1.4rem;
+      cursor: pointer;
+
+      p {
+        font-size: 1.6rem;
+      }
+    }
+
+    .headerIcons {
+      cursor: pointer;
+    }
   }
 `;
 
 function Header() {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  console.log(user);
+
   return (
     <StyledHeader>
       <img
@@ -33,8 +56,18 @@ function Header() {
       />
       <SearchBar />
       <div className="headerActions">
-        <AiOutlineVideoCameraAdd />
-        <LuUserCircle2 />
+        <AiOutlineVideoCameraAdd className="headerIcons" />
+        {user ? (
+          <LuUserCircle2
+            className="headerIcons"
+            onClick={() => navigate("/user")}
+          />
+        ) : (
+          <div className="singIn" onClick={() => navigate("/login")}>
+            <LuUserCircle2 className="headerIcons" />
+            <p>Login</p>
+          </div>
+        )}
       </div>
     </StyledHeader>
   );

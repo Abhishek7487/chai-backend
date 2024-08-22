@@ -13,7 +13,6 @@ import { MdKeyboardArrowRight } from "react-icons/md";
 const StyledSidebar = styled.aside`
   grid-row: 2 / -1;
   grid-column: 1 / 2;
-  border-right: 1px solid var(--color-secondary);
   display: flex;
   flex-direction: column;
   gap: 1.2rem;

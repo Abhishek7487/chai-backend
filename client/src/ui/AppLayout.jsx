@@ -15,6 +15,8 @@ const StyledAppLayout = styled.header`
 
 const Main = styled.main`
   overflow: scroll;
+  padding: 1.2rem 2.4rem;
+  padding-bottom: 0;
 `;
 
 function AppLayout() {
